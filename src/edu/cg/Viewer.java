@@ -5,6 +5,8 @@ import edu.cg.algebra.Vec;
 import edu.cg.models.Locomotive.Locomotive;
 import edu.cg.models.Track.Track;
 import edu.cg.models.Track.TrackSegment;
+import edu.cg.util.glu.GLU;
+
 import static org.lwjgl.opengl.GL21.*;
 
 /**
@@ -51,8 +53,10 @@ public class Viewer {
         if (this.isDayMode) {
             // TODO: Setup background when day mode is on
             // use gl.glClearColor() function.
+            glClearColor(0,20,130,0);
         } else {
             // TODO: Setup background when night mode is on.
+            glClearColor(10,30,50,0);
         }
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glMatrixMode(GL_MODELVIEW);
@@ -110,10 +114,16 @@ public class Viewer {
         // TODO: In this method you are advised to use :
         //       GLU glu = new GLU();
         //       glu.gluLookAt();
+        GLU glu = new GLU();
         if (this.isBirdseyeView) {
             // TODO Setup camera for the Birds-eye view (You need to configure the viewing transformation accordingly).
+
+              glu.gluLookAt((float)birdEyeCameraPostion[0],(float)birdEyeCameraPostion[1],(float)birdEyeCameraPostion[2],
+                      (float)carInitialPosition[0],(float)carInitialPosition[0],(float)carInitialPosition[0],0f,0f,0f );
         } else {
             // TODO Setup camera for standard 3rd person view.
+                glu.gluLookAt((float)standardCameraPosition[0],(float)standardCameraPosition[1],(float)standardCameraPosition[2],
+                    (float)carInitialPosition[0],(float)carInitialPosition[0],(float)carInitialPosition[0],0f,0f,0f );
         }
     }
 

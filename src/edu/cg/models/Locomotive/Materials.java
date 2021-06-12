@@ -37,19 +37,30 @@ public final class Materials {
     }
 
     public static void setMaterialRoof() {
-        // TODO: Set the back body's roof material properties.
+        glColor4fv(BLACK.toGLColor());
     }
 
     public static void setMaterialChassis() {
-        // TODO: Set the locomotive's chassis' material properties.
+        glColor4fv(DARK_RED.toGLColor());
     }
 
     public static void setMaterialWheelTire() {
-        // TODO: Set the tires' material properties.
+        float col[] = { .01f, .01f, .01f };
+        glColor3fv(col);
+        glMaterialf(GL_FRONT, GL_SHININESS, 100);
+        glMaterialf(GL_FRONT, GL_DIFFUSE,  0);
+        glMaterialf(GL_FRONT, GL_SPECULAR,  0);
+        glMaterialf(GL_FRONT, GL_EMISSION,  0);
     }
 
     public static void setMaterialWheelRim() {
         // TODO: Set the rims' material properties.
+        glColor4fv(GREY.toGLColor());
+    }
+
+    public static void setMaterialWindow() {
+        // TODO(4): Use this method to define the color of the locomotive chassis.
+        glColor4fv(GREY.toGLColor());
     }
 
     public static void setMaterialFrontLight() {

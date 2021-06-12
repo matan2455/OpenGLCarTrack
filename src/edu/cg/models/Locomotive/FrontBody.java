@@ -26,6 +26,34 @@ public class FrontBody implements IRenderable {
     public void render() {
         glPushMatrix();
         // TODO(6): Copy your code from HW5.
+        glMatrixMode(GL_MODELVIEW);
+        glTranslated(0,Specification.FRONT_BODY_HEIGHT/2,Specification.FRONT_BODY_DEPTH/2);
+        chimney.render();
+        glTranslated(0,-Specification.FRONT_BODY_HEIGHT,0);
+        Materials.setMaterialChassis();
+        chassis.render();
+        glPopMatrix();
+
+
+        glPushMatrix();
+        glTranslated(Specification.FRONT_BODY_WIDTH/4,-Specification.FRONT_BODY_HEIGHT/2, Specification.FRONT_BODY_DEPTH + Specification.EPS);
+        carLight.render();
+        glTranslated(-Specification.FRONT_BODY_WIDTH/2,0,0);
+        carLight.render();
+
+
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslated(-1.25 * Specification.FRONT_BODY_WIDTH/2 + Specification.EPS,-Specification.FRONT_BODY_HEIGHT + Specification.EPS,1.1 * Specification.FRONT_BODY_DEPTH/2);
+        glRotated(90,0,1,0);
+        wheel.render();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslated(1.25 * Specification.FRONT_BODY_WIDTH/2 + Specification.EPS,-Specification.FRONT_BODY_HEIGHT + Specification.EPS,1.1 * Specification.FRONT_BODY_DEPTH/2);
+        glRotated(-90,0,1,0);
+        wheel.render();
         glPopMatrix();
     }
 
