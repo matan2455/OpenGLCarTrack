@@ -5,6 +5,7 @@ import edu.cg.algebra.Vec;
 import edu.cg.models.Locomotive.Locomotive;
 import edu.cg.models.Track.Track;
 import edu.cg.models.Track.TrackSegment;
+import static edu.cg.util.glu.Project.gluPerspective;
 import edu.cg.util.glu.GLU;
 
 import static org.lwjgl.opengl.GL21.*;
@@ -24,9 +25,13 @@ public class Viewer {
     private boolean isBirdseyeView = false; // Indicates whether the camera's perspective corresponds to the vehicle's
 
     // TODO: Set the initial position of the vehicle in the scene by assigning a value to carInitialPosition.
-    private final double[] carInitialPosition = {0.3,0.5,0.1};
-    private final double[] standardCameraPosition = {0.3,0.5,0.1};
-    private final double[] birdEyeCameraPostion = {0.3,0.5,0.8};
+    private final double[] carInitialPosition = {0.5,0.3,0.2};
+    private final double[] standardCameraPosition = {0.5,0.7,0.0};
+//    private final double[] standardCameraPosition = {0.0,0.0,0.0};
+    private final double[] birdEyeCameraPostion = {0.5,1,0.5};
+    private final float[] dayLight = {1.0f,0.0f,0.0f,1.0f};
+    private static final Vec DARK_BLUE = new Vec(0f, 0f, 25f / 255f);
+    private static final Vec LIGHT_GREY = new Vec(225f / 255f, 225f / 255f, 225f / 255f);
     // TODO: set the car scale as you wish - we uniformly scale the car by 3.0.
 
     // TODO: You can add additional fields to assist your implementation, for example:
@@ -53,10 +58,12 @@ public class Viewer {
         if (this.isDayMode) {
             // TODO: Setup background when day mode is on
             // use gl.glClearColor() function.
-            glClearColor(0,20,130,0);
+            glClearColor(0,20,130,100);
+//            glColor4fv(LIGHT_GREY.toGLColor());
         } else {
             // TODO: Setup background when night mode is on.
-            glClearColor(10,30,50,0);
+            glClearColor(5,5,5,100);
+//            glColor4fv(DARK_BLUE.toGLColor());
         }
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glMatrixMode(GL_MODELVIEW);
@@ -119,29 +126,44 @@ public class Viewer {
             // TODO Setup camera for the Birds-eye view (You need to configure the viewing transformation accordingly).
 
               glu.gluLookAt((float)birdEyeCameraPostion[0],(float)birdEyeCameraPostion[1],(float)birdEyeCameraPostion[2],
-                      (float)carInitialPosition[0],(float)carInitialPosition[0],(float)carInitialPosition[0],0f,0f,0f );
+                      (float)carInitialPosition[0],(float)carInitialPosition[1],(float)carInitialPosition[2],0f,0f,1f );
         } else {
             // TODO Setup camera for standard 3rd person view.
                 glu.gluLookAt((float)standardCameraPosition[0],(float)standardCameraPosition[1],(float)standardCameraPosition[2],
-                    (float)carInitialPosition[0],(float)carInitialPosition[0],(float)carInitialPosition[0],0f,0f,0f );
+                    (float)carInitialPosition[0],(float)carInitialPosition[1],(float)carInitialPosition[2],0f,0f,1f );
         }
     }
 
     private void setupLights() {
+
+
         if (this.isDayMode) {
             // TODO Setup day lighting.
             // * Remember: switch-off any light sources that were used in night mode and are not use in day mode.
-
+            glDisable(GL_LIGHT2);
+            glEnable(GL_LIGHTING);
+            glEnable(GL_LIGHT0);
+            glEnable(GL_LIGHT1);
+            glLightfv(GL_LIGHT0,GL_SPECULAR,new float[] {1f,1f,0f,1f});
+            glLightfv(GL_LIGHT0,GL_POSITION,new float[] {0.5f,1f,1f,0f});
+            glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,new float[] {1f,1f,1f,1f});
+            glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,10f);
         } else {
             // TODO Setup night lighting - here you should only set the ambient light source.
             //      The locomotive's spotlights should be defined in the car local coordinate system.
             //      so it is better to define the car light properties right before your render the locomotive rather
             //      than at this point.
+            glDisable(GL_LIGHT0);
+            glDisable(GL_LIGHT1);
+            glEnable(GL_LIGHTING);
+            glEnable(GL_LIGHT2);
+            glLightfv(GL_LIGHT1,GL_AMBIENT,new float[] {0f,0f,0f,1f});
         }
     }
 
     private void renderTrack() {
         glPushMatrix();
+        this.gameTrack.init();
         // TODO : Note that if you wish to support textures, the render method of gameTrack must be changed.
         this.gameTrack.render();
         glPopMatrix();
@@ -156,6 +178,10 @@ public class Viewer {
         // * You should set up the car lights right before you render the locomotive after the appropriate transformations
         // * have been applied. This ensures that the light sources are fixed to the locomotive (ofcourse all of this
         // * is only relevant to rendering the vehicle in night mode).
+        glPushMatrix();
+        glClearColor(50,0,0,100);
+        this.car.render();
+        glPopMatrix();
     }
 
     public GameState getGameState() {
