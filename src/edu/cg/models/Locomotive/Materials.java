@@ -37,11 +37,19 @@ public final class Materials {
     }
 
     public static void setMaterialRoof() {
-        glColor4fv(BLACK.toGLColor());
+        float[] col = BLACK.toGLColor();
+        glColor4fv(col);
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, col);
+        glMaterialfv(GL_FRONT, GL_SPECULAR, BLACK.toGLColor());
+        glMaterialfv(GL_FRONT, GL_EMISSION, col);
     }
 
     public static void setMaterialChassis() {
-        glColor4fv(DARK_RED.toGLColor());
+        float[] col = DARK_RED.toGLColor();
+        glColor4fv(col);
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, col);
+        glMaterialfv(GL_FRONT, GL_SPECULAR, BLACK.toGLColor());
+        glMaterialfv(GL_FRONT, GL_EMISSION, col);
     }
 
     public static void setMaterialWheelTire() {
@@ -55,12 +63,20 @@ public final class Materials {
 
     public static void setMaterialWheelRim() {
         // TODO: Set the rims' material properties.
-        glColor4fv(GREY.toGLColor());
+        float[] col = GREY.toGLColor();
+        glColor4fv(col);
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, col);
+        glMaterialfv(GL_FRONT, GL_SPECULAR, BLACK.toGLColor());
+        glMaterialfv(GL_FRONT, GL_EMISSION, col);
     }
 
     public static void setMaterialWindow() {
         // TODO(4): Use this method to define the color of the locomotive chassis.
-        glColor4fv(GREY.toGLColor());
+        float[] col = GREY.toGLColor();
+        glColor4fv(col);
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, col);
+        glMaterialfv(GL_FRONT, GL_SPECULAR, BLACK.toGLColor());
+        glMaterialfv(GL_FRONT, GL_EMISSION, col);
     }
 
     public static void setMaterialFrontLight() {

@@ -24,23 +24,25 @@ public class FrontBody implements IRenderable {
 
     @Override
     public void render() {
+
         Materials.setMaterialChassis();
         glPushMatrix();
+
         chassis.render();
         //In this part we draw the two front wheels
         glPushMatrix();
         glTranslated(0,0,-Specification.FRONT_BODY_DEPTH/2 + Specification.FRONT_BODY_DEPTH*0.6);
 
         glPushMatrix();
-        glTranslated(Specification.FRONT_BODY_WIDTH/2,0,0);
-        glTranslated(0,-Specification.FRONT_BODY_HEIGHT/2,0);
-        wheel.render();
+            glTranslated(Specification.FRONT_BODY_WIDTH/2,0,0);
+            glTranslated(0,-Specification.FRONT_BODY_HEIGHT/2,0);
+            wheel.render();
         glPopMatrix();
 
         glPushMatrix();
-        glTranslated(-Specification.FRONT_BODY_WIDTH/2,0,0);
-        glTranslated(0,-Specification.FRONT_BODY_HEIGHT/2,0);
-        wheel.render();
+            glTranslated(-Specification.FRONT_BODY_WIDTH/2,0,0);
+            glTranslated(0,-Specification.FRONT_BODY_HEIGHT/2,0);
+            wheel.render();
         glPopMatrix();
 
         glPopMatrix();
