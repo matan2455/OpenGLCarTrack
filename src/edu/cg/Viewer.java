@@ -7,6 +7,7 @@ import edu.cg.models.Track.Track;
 import edu.cg.models.Track.TrackSegment;
 import static edu.cg.util.glu.Project.gluPerspective;
 import edu.cg.util.glu.GLU;
+import edu.cg.util.glu.Project;
 
 import static org.lwjgl.opengl.GL21.*;
 
@@ -25,10 +26,10 @@ public class Viewer {
     private boolean isBirdseyeView = false; // Indicates whether the camera's perspective corresponds to the vehicle's
 
     // TODO: Set the initial position of the vehicle in the scene by assigning a value to carInitialPosition.
-    private final double[] carInitialPosition = {0.5,0.4,-0.4};
-    private final double[] standardCameraPosition = {0.5,0.3,0.5};
+    private final double[] carInitialPosition = {0,0,0};
+    private final double[] standardCameraPosition = {0,0.4,-1.2};
 //    private final double[] standardCameraPosition = {0.0,0.0,0.0};
-    private final double[] birdEyeCameraPostion = {0.5,1,0.9};
+    private final double[] birdEyeCameraPostion = {0,3,0};
     private final float[] dayLight = {1.0f,0.0f,0.0f,1.0f};
     // TODO: set the car scale as you wish - we uniformly scale the car by 3.0.
 
@@ -123,13 +124,13 @@ public class Viewer {
         if (this.isBirdseyeView) {
             // TODO Setup camera for the Birds-eye view (You need to configure the viewing transformation accordingly).
             glMatrixMode(GL_MODELVIEW);
-            glLoadIdentity();
+//            glLoadIdentity();
             glu.gluLookAt((float)birdEyeCameraPostion[0],(float)birdEyeCameraPostion[1],(float)birdEyeCameraPostion[2],
                       (float)carInitialPosition[0],(float)carInitialPosition[1],(float)carInitialPosition[2],0f,0f,1f );
         } else {
             // TODO Setup camera for standard 3rd person view.
             glMatrixMode(GL_MODELVIEW);
-            glLoadIdentity();
+//            glLoadIdentity();
             glu.gluLookAt((float)standardCameraPosition[0],(float)standardCameraPosition[1],(float)standardCameraPosition[2],
                     (float)carInitialPosition[0],(float)carInitialPosition[1],(float)carInitialPosition[2],0f,0f,1f );
         }
@@ -141,8 +142,8 @@ public class Viewer {
         if (this.isDayMode) {
             // TODO Setup day lighting.
             // * Remember: switch-off any light sources that were used in night mode and are not use in day mode.
-            glDisable(GL_LIGHT2);
             glEnable(GL_LIGHTING);
+            glDisable(GL_LIGHT2);
             glEnable(GL_LIGHT0);
             glEnable(GL_LIGHT1);
             glLightfv(GL_LIGHT0,GL_SPECULAR,new float[] {1f,1f,0f,1f});
@@ -181,6 +182,7 @@ public class Viewer {
         // * is only relevant to rendering the vehicle in night mode).
         glPushMatrix();
 //        glClearColor(50,0,0,100);
+//        glScaled(1.0/3,1.0/3,1.0/3);
         this.car.render();
         glPopMatrix();
     }
@@ -212,10 +214,17 @@ public class Viewer {
         canvasHeight = height;
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
+
         if (this.isBirdseyeView) {
             // TODO : Set a projection matrix for birdseye view mode.
+            glMatrixMode(GL_PROJECTION);
+            glLoadIdentity();
+            Project.gluPerspective(60.0f,(float)width/(float)height,0.5f,100.0f);
         } else {
             // TODO : Set a projection matrix for third person mode.
+            glMatrixMode(GL_PROJECTION);
+            glLoadIdentity();
+            Project.gluPerspective(120.0f,(float)width/(float)height,0.1f,100.0f);
         }
     }
 
