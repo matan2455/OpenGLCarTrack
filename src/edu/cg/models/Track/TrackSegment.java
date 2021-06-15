@@ -3,6 +3,8 @@ package edu.cg.models.Track;
 import edu.cg.algebra.Point;
 import edu.cg.models.Box;
 import edu.cg.models.IRenderable;
+import edu.cg.models.Locomotive.Materials;
+import edu.cg.util.glu.Texture;
 
 import java.util.LinkedList;
 
@@ -69,13 +71,15 @@ public class TrackSegment implements IRenderable {
   }
 
   public TrackSegment(double difficulty) {
-    this.box = new Box(BOX_LENGTH, true);
+    this.box = new Box(BOX_LENGTH, false);
     setDifficulty(difficulty);
   }
 
   public void render() {
     //Render the track segment
     // TODO : For texture support, you need to enable textures before the rendering the boxes, asphalt and grass.
+//    Texture texture = Texture.loadTexture("RoadTexture.png");
+
     renderBoxes();
     renderAsphalt();
     renderGrass();
