@@ -53,12 +53,12 @@ public final class Materials {
     }
 
     public static void setMaterialWheelTire() {
-        float col[] = { .01f, .01f, .01f };
+        float col[] = BLACK.toGLColor();
         glColor3fv(col);
-        glMaterialf(GL_FRONT, GL_SHININESS, 100);
-        glMaterialf(GL_FRONT, GL_DIFFUSE,  0);
-        glMaterialf(GL_FRONT, GL_SPECULAR,  0);
-        glMaterialf(GL_FRONT, GL_EMISSION,  0);
+        glColor4fv(col);
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, col);
+        glMaterialfv(GL_FRONT, GL_SPECULAR, BLACK.toGLColor());
+        glMaterialfv(GL_FRONT, GL_EMISSION, col);
     }
 
     public static void setMaterialWheelRim() {

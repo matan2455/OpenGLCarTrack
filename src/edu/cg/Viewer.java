@@ -5,7 +5,6 @@ import edu.cg.models.Locomotive.Locomotive;
 import edu.cg.models.Track.Track;
 import edu.cg.models.Track.TrackSegment;
 import edu.cg.util.glu.Project;
-import org.lwjgl.opengl.GL21;
 
 import static org.lwjgl.opengl.GL21.*;
 
@@ -26,14 +25,10 @@ public class Viewer {
     private final double carInitialPositionY = 1;
     private final double carInitialPositionZ = -20;
     private final double[] carInitialPosition = {carInitialPositionX,carInitialPositionY,carInitialPositionZ};
-    private final double[] standardCameraPosition = {0,carInitialPositionY + 3,carInitialPositionZ+10};
-//    private final double[] standardCameraPosition = {0.0,0.0,0.0};
-    private final double[] birdEyeCameraPostion = {carInitialPositionX,carInitialPositionY+40,carInitialPositionZ};
+    private final double[] standardCameraPosition = {0,carInitialPositionY + 6,carInitialPositionZ+6};
+    private final double[] birdEyeCameraPostion = {carInitialPositionX,carInitialPositionY+40,carInitialPositionZ-15};
     private final float[] dayLight = {1.0f,1.0f,1.0f,1.0f};
-    private final float[] moonLight = {0.2f,0.2f,0.2f,1.0f};
-    private final float[] glAmbient =  new float[] {1f,1f,1f,1f};
-    private final float[] glSpecular = new float[] {1f,1f,1f,1f};
-    private final float[] glPosition = new float[] {1f,1f,1f,0f};
+
 
     // TODO: set the car scale as you wish - we uniformly scale the car by 3.0.
 
@@ -50,7 +45,7 @@ public class Viewer {
         canvasHeight = height;
         this.gameState = new GameState();
         this.gameTrack = new Track();
-        this.carCameraTranslation = new Vec(0.0D);
+        this.carCameraTranslation = new Vec(0);
         this.car = new Locomotive();
     }
 
@@ -58,11 +53,9 @@ public class Viewer {
         if (!this.isModelInitialized)
             initModel();
         if (this.isDayMode) {
-
-            glClearColor(0.35F, 0.6F, 0.85F, 1.0F);
-
+            glClearColor(0.3f, 0.6f, 0.8f, 1f);
         } else {
-            glClearColor(0.0F, 0.0F, 0.25F, 1.0F);
+            glClearColor(0, 0, 0.15f, 1f);
         }
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glMatrixMode(GL_MODELVIEW);
@@ -117,22 +110,20 @@ public class Viewer {
 
     private void setupCamera() {
 
-        double eyeX = this.carCameraTranslation.x;
-        double eyeY = this.carCameraTranslation.y;
-        double eyeZ = this.carCameraTranslation.z;
-
+        float posX = this.carCameraTranslation.x;
+        float posY = this.carCameraTranslation.y;
+        float posZ = this.carCameraTranslation.z;
 
         if (this.isBirdseyeView) {
-            eyeX += birdEyeCameraPostion[0];
-            eyeY += birdEyeCameraPostion[1];
-            eyeZ += birdEyeCameraPostion[2];
-            Project.gluLookAt((float)eyeX,(float)eyeY,(float)eyeZ, (float)eyeX,(float)eyeY-1,(float)eyeZ,0f,0f,-1f );
-
+            posX += birdEyeCameraPostion[0];
+            posY += birdEyeCameraPostion[1];
+            posZ += birdEyeCameraPostion[2];
+            Project.gluLookAt(posX,posY,posZ, posX,posY-1,posZ,0,0,-1 );
         } else {
-            eyeX += standardCameraPosition[0];
-            eyeY += standardCameraPosition[1];
-            eyeZ += standardCameraPosition[2];
-            Project.gluLookAt((float)eyeX,(float)eyeY,(float)eyeZ, (float)eyeX,(float)eyeY,(float)eyeZ-10,0f,1f,0f );
+            posX += standardCameraPosition[0];
+            posY += standardCameraPosition[1];
+            posZ += standardCameraPosition[2];
+            Project.gluLookAt(posX,posY,posZ, posX,posY,posZ-10,0,1,0 );
         }
 
     }
@@ -144,11 +135,13 @@ public class Viewer {
             // TODO Setup day lighting.
             // * Remember: switch-off any light sources that were used in night mode and are not use in day mode.
             glDisable(GL_LIGHT1);
-            Vec lightDirection = (new Vec(0.0D, 1.0D, 1.0D)).normalize();
+            glDisable(GL_LIGHT2);
+            glDisable(GL_LIGHT3);
+            Vec lightDirection = (new Vec(0, 1, 1)).normalize();
             glLightfv(GL_LIGHT0, GL_DIFFUSE, dayLight);
             glLightfv(GL_LIGHT0, GL_SPECULAR, dayLight);
-            glLightfv(GL_LIGHT0, GL_POSITION, new float[] {lightDirection.x,lightDirection.y,lightDirection.z,0f});
-            glLightfv(GL_LIGHT0, GL_AMBIENT, new float[]{0.1F, 0.1F, 0.1F, 1.0F});
+            glLightfv(GL_LIGHT0, GL_POSITION, new float[] {lightDirection.x,lightDirection.y,lightDirection.z,0});
+            glLightfv(GL_LIGHT0, GL_AMBIENT, new float[]{0.1f, 0.1f, 0.1f, 1});
             glEnable(GL_LIGHT0);
         } else {
             // TODO Setup night lighting - here you should only set the ambient light source.
@@ -156,17 +149,14 @@ public class Viewer {
             //      so it is better to define the car light properties right before your render the locomotive rather
             //      than at this point.
             glDisable(GL_LIGHT0);
-            glLightModelfv(GL_LIGHT1, new float[]{0.25F, 0.25F, 0.3F, 1.0F});
+            glLightModelfv(GL_LIGHT1, new float[]{0.25f, 0.25f, 0.3f, 1.0f});
         }
     }
 
     private void renderTrack() {
         glPushMatrix();
-
-
-//        glLoadIdentity();
         this.gameTrack.init();
-//        // TODO : Note that if you wish to support textures, the render method of gameTrack must be changed.
+        // TODO : Note that if you wish to support textures, the render method of gameTrack must be changed.
         this.gameTrack.render();
         glPopMatrix();
     }
@@ -180,14 +170,21 @@ public class Viewer {
         // * You should set up the car lights right before you render the locomotive after the appropriate transformations
         // * have been applied. This ensures that the light sources are fixed to the locomotive (ofcourse all of this
         // * is only relevant to rendering the vehicle in night mode).
-        glPushMatrix();
 
-        glTranslated(this.carInitialPosition[0] + (double)this.carCameraTranslation.x, this.carInitialPosition[1] + (double)this.carCameraTranslation.y, this.carInitialPosition[2] + (double)this.carCameraTranslation.z);
-        glRotated(180.0D - this.gameState.getCarRotation(), 0.0D, 1.0D, 0.0D);
-        glScaled(5,5,5);
+        float[] rightLight = new float[]{0.1f, 0.15f, 0.5f, 1.0f};
+        float[] leftLight = new float[]{-0.1f, 0.15f, 0.5f, 1.0f};
+        double carPositionX =  this.carInitialPosition[0] + (double)this.carCameraTranslation.x;
+        double carPositionY = this.carInitialPosition[1] + (double)this.carCameraTranslation.y;
+        double carPositionZ = this.carInitialPosition[2] + (double)this.carCameraTranslation.z;
+
+        glPushMatrix();
+        glTranslated(carPositionX, carPositionY, carPositionZ);
+        glRotated(180 - this.gameState.getCarRotation(), 0, 1, 0);
+        glScaled(3,3,3);
         glTranslated(0,0.3,0);
         if (!this.isDayMode) {
-            this.setupCarLights();
+            this.setCarLight(GL_LIGHT2, rightLight);
+            this.setCarLight(GL_LIGHT3, leftLight);
         }
         this.car.render();
         glPopMatrix();
@@ -209,30 +206,12 @@ public class Viewer {
         this.isModelInitialized = true;
     }
 
-
-    private void setupCarLights() {
-
-        float[] rightLight = new float[]{0.1f, 0.15f, 0.5f, 1.0F};
-        float[] leftLight = new float[]{-0.1f, 0.15f, 0.5f, 1.0F};
-        this.setupCarLight(GL_LIGHT2, rightLight);
-        this.setupCarLight(GL_LIGHT3, leftLight);
-    }
-
-    private void setupCarLight(int light, float[] pos) {
-        glLightfv(light,GL_POSITION, pos);
-        glLightfv(light, GL_SPOT_DIRECTION, new float[] {0.0f, 0.0f, 1.0f, 0.0f});
-        glLightf(light, GL_SPOT_CUTOFF, 60.0F);
-        glLightfv(light, GL_DIFFUSE, dayLight);
-        glEnable(light);
-    }
-
-    private void initDayLight(int light) {
-
-
-    }
-
-    private void initMoonLight(int moonLight) {
-        glLightModelfv(moonLight, new float[]{0.25F, 0.25F, 0.3F, 1.0F});
+    private void setCarLight(int lightID, float[] position) {
+        glLightfv(lightID,GL_POSITION, position);
+        glLightfv(lightID, GL_SPOT_DIRECTION, new float[] {0f, 0f, 1f, 0f});
+        glLightf(lightID, GL_SPOT_CUTOFF, 60f);
+        glLightfv(lightID, GL_DIFFUSE, dayLight);
+        glEnable(lightID);
     }
 
     public void reshape(int x, int y, int width, int height) {
@@ -247,15 +226,13 @@ public class Viewer {
         glLoadIdentity();
 
         if (this.isBirdseyeView) {
-            // TODO : Set a projection matrix for birdseye view mode.
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
-            Project.gluPerspective(60.0f,(float)width/(float)height,0.5f,100.0f);
+            Project.gluPerspective(60f,(float)width/(float)height,0.5f,100f);
         } else {
-            // TODO : Set a projection matrix for third person mode.
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
-            Project.gluPerspective(120.0f,(float)width/(float)height,0.1f,100.0f);
+            Project.gluPerspective(120f,(float)width/(float)height,0.1f,100f);
         }
     }
 

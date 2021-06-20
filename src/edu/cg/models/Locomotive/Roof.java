@@ -16,15 +16,18 @@ public class Roof implements IRenderable {
     public void render() {
 
         glPushMatrix();
-        // TODO(7): Render the locomotive back body roof
+
         Materials.setMaterialRoof();
-        glScaled((float)(Specification.ROOF_WIDTH/Specification.ROOF_HEIGHT)/2, 1,1);
-        new Cylinder().draw((float) Specification.ROOF_HEIGHT,(float) Specification.ROOF_HEIGHT,(float) (Specification.ROOF_DEPTH - 2*Specification.EPS),20,1);
-        glTranslated(0,0,Specification.ROOF_DEPTH - 2*Specification.EPS);
+        glScaled((float)(Specification.ROOF_WIDTH/Specification.ROOF_HEIGHT)/2, 0.75,1);
+
+        new Cylinder().draw((float) Specification.ROOF_HEIGHT,(float) Specification.ROOF_HEIGHT,(float) (Specification.ROOF_DEPTH),20,1);
+        glTranslated(0,0,Specification.ROOF_DEPTH);
+
         new Disk().draw(0f,(float) Specification.ROOF_HEIGHT,20,1);
-        glTranslated(0,0,-Specification.ROOF_DEPTH + 2*Specification.EPS);
-        glRotated(180,1,0,0);
-        new Disk().draw(0f,(float) Specification.ROOF_HEIGHT,20,1);
+        glTranslated(0,0,-Specification.ROOF_DEPTH);
+        glRotated(-180,1,0,0);
+
+
         glPopMatrix();
     }
 

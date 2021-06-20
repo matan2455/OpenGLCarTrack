@@ -15,10 +15,8 @@ public class Locomotive implements IRenderable {
     public void render() {
         glPushMatrix();
         glPushMatrix();
-        glTranslated(0., -Specification.BASE_UNIT, Specification.FRONT_BODY_DEPTH / 2);
         frontBody.render();
         glPopMatrix();
-        glTranslated(0., 0., -Specification.BACK_BODY_DEPTH / 2);
         backBody.render();
         glPopMatrix();
     }

@@ -25,51 +25,40 @@ public class FrontBody implements IRenderable {
     @Override
     public void render() {
 
-        Materials.setMaterialChassis();
         glPushMatrix();
+        // TODO(6): Render each part along with affine transformations in order to bring every component to the
+        //          front-body coordinate system. You should make sure that the OpenGL ModelView matrix when applied on
+        //          the relevant component it will transform it to the proper location in the front-body coordinate
+        //          system.
 
-        chassis.render();
-        //In this part we draw the two front wheels
-        glPushMatrix();
-        glTranslated(0,0,-Specification.FRONT_BODY_DEPTH/2 + Specification.FRONT_BODY_DEPTH*0.6);
-
-        glPushMatrix();
-            glTranslated(Specification.FRONT_BODY_WIDTH/2,0,0);
-            glTranslated(0,-Specification.FRONT_BODY_HEIGHT/2,0);
-            wheel.render();
-        glPopMatrix();
-
-        glPushMatrix();
-            glTranslated(-Specification.FRONT_BODY_WIDTH/2,0,0);
-            glTranslated(0,-Specification.FRONT_BODY_HEIGHT/2,0);
-            wheel.render();
-        glPopMatrix();
-
-        glPopMatrix();
-
-        //In this part we draw the two front lights
-        Materials.setMaterialLightCase();
-        glPushMatrix();
-        glTranslated(0,0,-Specification.FRONT_BODY_DEPTH/2 + Specification.FRONT_BODY_DEPTH);
-
-        glPushMatrix();
-        glTranslated(Specification.FRONT_BODY_WIDTH/4,0,0);
-        carLight.render();
-        glPopMatrix();
-
-        glPushMatrix();
-        glTranslated(-Specification.FRONT_BODY_WIDTH/4,0,0);
-        carLight.render();
-        glPopMatrix();
-
-        glPopMatrix();
-
-        //In thi part we draw the chimney
-        glPushMatrix();
-        glTranslated(0,1.25*Specification.FRONT_BODY_HEIGHT,0);
+        glMatrixMode(GL_MODELVIEW);
+        glTranslated(0,Specification.FRONT_BODY_HEIGHT/2,Specification.FRONT_BODY_DEPTH/2);
         chimney.render();
+        glTranslated(0,-Specification.FRONT_BODY_HEIGHT,0);
+        Materials.setMaterialChassis();
+        chassis.render();
         glPopMatrix();
+
+
+        glPushMatrix();
+        glTranslated(Specification.FRONT_BODY_WIDTH/4,-Specification.FRONT_BODY_HEIGHT/2, Specification.FRONT_BODY_DEPTH + Specification.EPS);
+        carLight.render();
+        glTranslated(-Specification.FRONT_BODY_WIDTH/2,0,0);
+        carLight.render();
+
+
         glPopMatrix();
+
+        glPushMatrix();
+        glTranslated(-1.25 * Specification.FRONT_BODY_WIDTH/2 + Specification.EPS,-Specification.FRONT_BODY_HEIGHT + Specification.EPS,1.1 * Specification.FRONT_BODY_DEPTH/2);
+        glRotated(90,0,1,0);
+        wheel.render();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslated(1.25 * Specification.FRONT_BODY_WIDTH/2 + Specification.EPS,-Specification.FRONT_BODY_HEIGHT + Specification.EPS,1.1 * Specification.FRONT_BODY_DEPTH/2);
+        glRotated(-90,0,1,0);
+        wheel.render();
         glPopMatrix();
     }
 

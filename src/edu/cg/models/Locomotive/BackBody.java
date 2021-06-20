@@ -28,132 +28,43 @@ public class BackBody implements IRenderable {
     @Override
     public void render() {
         glPushMatrix();
-        // TODO(8): Copy your code from HW5.
+        glTranslated(0,0, -Specification.BACK_BODY_DEPTH/2);
         Materials.setMaterialChassis();
-        glPushMatrix();
         chassis.render();
+        // X=-rx/2:
+        Materials.setMaterialWindow();
+        glTranslated(0,0, - Specification.BACK_BODY_DEPTH/4 - Specification.EPS);
+        windowTwo.render();
+        glTranslated(0,0, Specification.BACK_BODY_DEPTH/4 + 2 * Specification.EPS);
+        windowThree.render();
+        glTranslated(Specification.BACK_BODY_WIDTH/4 ,0,Specification.BACK_BODY_DEPTH/4);
+        windowOne.render();
+        glTranslated( -Specification.BACK_BODY_WIDTH/2 - 4 * Specification.EPS,-Specification.BACK_BODY_HEIGHT/12,Specification.BACK_BODY_DEPTH/12);
+        door.render();
+        glPopMatrix();
 
         glPushMatrix();
-        glTranslated(0,0,Specification.BACK_BODY_DEPTH/2 - Specification.BACK_BODY_DEPTH*0.625);
+        glTranslated( 0,Specification.BACK_BODY_HEIGHT/6,-0.9*Specification.BACK_BODY_DEPTH - 2 * Specification.EPS);
+        backWindow.render();
+
+        glPopMatrix();
+
 
         glPushMatrix();
-        glTranslated(Specification.BACK_BODY_WIDTH/2,0,0);
-        glTranslated(0,-Specification.BACK_BODY_HEIGHT/2,0);
+        glTranslated(-1.25 * Specification.BACK_BODY_WIDTH/2 - Specification.EPS,-Specification.BACK_BODY_HEIGHT/2,- Specification.BACK_BODY_DEPTH/2);
+        glRotated(90,0,1,0);
         wheel.render();
         glPopMatrix();
-
         glPushMatrix();
-        glTranslated(-Specification.BACK_BODY_WIDTH/2,0,0);
-        glTranslated(0,-Specification.BACK_BODY_HEIGHT/2,0);
-        wheel.render();
-        glPopMatrix();
-        glPopMatrix();
-
-        //In this part we draw roof
-        glPushMatrix();
-        glTranslated(0,0,-Specification.BACK_BODY_DEPTH/2 + 2*Specification.EPS);
-        glTranslated(0,Specification.BACK_BODY_HEIGHT/2,0);
-        roof.render();
-        glPushMatrix();
+        glTranslated(1.25 * Specification.BACK_BODY_WIDTH/2 + Specification.EPS,-Specification.BACK_BODY_HEIGHT/2,-Specification.BACK_BODY_DEPTH/2);
         glRotated(-90,0,1,0);
-        glTranslated(Specification.BACK_BODY_DEPTH,0,0);
-        glPopMatrix();
-        glPopMatrix();
-
-        //In this part we front window
-        Materials.setMaterialWheelRim();
-        glPushMatrix();
-        glTranslated(0,0,Specification.BACK_BODY_DEPTH/2 + Specification.EPS);
-
-        glBegin(GL_QUADS);
-        glNormal3d(0, 0, 1);
-        glVertex3d(0.75*Specification.BACK_BODY_WIDTH*0.5, 0.75*Specification.BACK_BODY_HEIGHT*0.5, 0);
-        glVertex3d(-0.75*Specification.BACK_BODY_WIDTH*0.5, 0.75*Specification.BACK_BODY_HEIGHT*0.5, 0);
-        glVertex3d(-0.75*Specification.BACK_BODY_WIDTH*0.5, 0, 0);
-        glVertex3d(0.75*Specification.BACK_BODY_WIDTH*0.5, 0, 0);
-        glEnd();
+        wheel.render();
         glPopMatrix();
 
-        //In this part we draw back window
-        glPushMatrix();
-        glTranslated(0,0,-Specification.BACK_BODY_DEPTH/2 - Specification.EPS);
-        glBegin(GL_QUADS);
-        glNormal3d(0, 0, -1);
-        glVertex3d(0.75*Specification.BACK_BODY_WIDTH*0.5, 0.75*Specification.BACK_BODY_HEIGHT*0.5, 0);
-        glVertex3d(0.75*Specification.BACK_BODY_WIDTH*0.5, -Specification.BACK_BODY_HEIGHT/8, 0);
-        glVertex3d(-0.75*Specification.BACK_BODY_WIDTH*0.5, -Specification.BACK_BODY_HEIGHT/8, 0);
-        glVertex3d(-0.75*Specification.BACK_BODY_WIDTH*0.5, 0.75*Specification.BACK_BODY_HEIGHT*0.5, 0);
-        glEnd();
-        glPopMatrix();
-
-        //In this part first window
-        glPushMatrix();
-        glBegin(GL_QUADS);
-        glNormal3d(1, 0, 0);
-        glVertex3d( Specification.BACK_BODY_WIDTH*0.5+ Specification.EPS, 0.75*Specification.BACK_BODY_HEIGHT*0.5,0.375*Specification.BACK_BODY_DEPTH*0.5);
-        glVertex3d(Specification.BACK_BODY_WIDTH*0.5+ Specification.EPS, 0.75*Specification.BACK_BODY_HEIGHT*0.5, 0.75*Specification.BACK_BODY_DEPTH*0.5);
-        glVertex3d(Specification.BACK_BODY_WIDTH*0.5+ Specification.EPS, -0.25*Specification.BACK_BODY_HEIGHT*0.50, 0.75*Specification.BACK_BODY_DEPTH*0.5);
-        glVertex3d(Specification.BACK_BODY_WIDTH*0.5+ Specification.EPS, -0.25*Specification.BACK_BODY_HEIGHT*0.50, 0.375*Specification.BACK_BODY_DEPTH*0.5);
-        glEnd();
-        glPopMatrix();
-
-        //In this part door
-        glPushMatrix();
-        glBegin(GL_QUADS);
-        glNormal3d(-1, 0, 0);
-        glVertex3d( -Specification.BACK_BODY_WIDTH*0.5-Specification.EPS, 0.75*Specification.BACK_BODY_HEIGHT*0.5,0.375*Specification.BACK_BODY_DEPTH*0.5);
-        glVertex3d(-Specification.BACK_BODY_WIDTH*0.5- Specification.EPS, -Specification.BACK_BODY_HEIGHT*0.50, 0.375*Specification.BACK_BODY_DEPTH*0.5);
-        glVertex3d(-Specification.BACK_BODY_WIDTH*0.5- Specification.EPS, -Specification.BACK_BODY_HEIGHT*0.50, 0.75*Specification.BACK_BODY_DEPTH*0.5);
-        glVertex3d(-Specification.BACK_BODY_WIDTH*0.5- Specification.EPS, 0.75*Specification.BACK_BODY_HEIGHT*0.5, 0.75*Specification.BACK_BODY_DEPTH*0.5);
-        glEnd();
-        glPopMatrix();
-
-        //In this part second window (both sides)
-        glPushMatrix();
-        glTranslated(0,0,- 0.3125*Specification.BACK_BODY_DEPTH);
-        glBegin(GL_QUADS);
-        glNormal3d(1, 0, 0);
-        glVertex3d( Specification.BACK_BODY_WIDTH*0.5+ Specification.EPS, 0.75*Specification.BACK_BODY_HEIGHT*0.5,0.375*Specification.BACK_BODY_DEPTH*0.5);
-        glVertex3d(Specification.BACK_BODY_WIDTH*0.5+ Specification.EPS, 0.75*Specification.BACK_BODY_HEIGHT*0.5, 0.75*Specification.BACK_BODY_DEPTH*0.5);
-        glVertex3d(Specification.BACK_BODY_WIDTH*0.5+ Specification.EPS, -0.25*Specification.BACK_BODY_HEIGHT*0.50, 0.75*Specification.BACK_BODY_DEPTH*0.5);
-        glVertex3d(Specification.BACK_BODY_WIDTH*0.5+ Specification.EPS, -0.25*Specification.BACK_BODY_HEIGHT*0.50, 0.375*Specification.BACK_BODY_DEPTH*0.5);
-        glEnd();
-        glPopMatrix();
 
         glPushMatrix();
-        glTranslated(0,0,- 0.3125*Specification.BACK_BODY_DEPTH);
-        glBegin(GL_QUADS);
-        glNormal3d(-1, 0, 0);
-        glVertex3d( -Specification.BACK_BODY_WIDTH*0.5-Specification.EPS, 0.75*Specification.BACK_BODY_HEIGHT*0.5,0.375*Specification.BACK_BODY_DEPTH*0.5);
-        glVertex3d(-Specification.BACK_BODY_WIDTH*0.5-Specification.EPS, -0.25*Specification.BACK_BODY_HEIGHT*0.50, 0.375*Specification.BACK_BODY_DEPTH*0.5);
-        glVertex3d(-Specification.BACK_BODY_WIDTH*0.5-Specification.EPS, -0.25*Specification.BACK_BODY_HEIGHT*0.50, 0.75*Specification.BACK_BODY_DEPTH*0.5);
-        glVertex3d(-Specification.BACK_BODY_WIDTH*0.5-Specification.EPS, 0.75*Specification.BACK_BODY_HEIGHT*0.5, 0.75*Specification.BACK_BODY_DEPTH*0.5);
-        glEnd();
-        glPopMatrix();
-
-
-        //In this part third window (both sides)
-        glPushMatrix();
-        glTranslated(0,0,- 0.625*Specification.BACK_BODY_DEPTH);
-        glBegin(GL_QUADS);
-        glNormal3d(1, 0, 0);
-        glVertex3d( Specification.BACK_BODY_WIDTH*0.5+ Specification.EPS, 0.75*Specification.BACK_BODY_HEIGHT*0.5,0.375*Specification.BACK_BODY_DEPTH*0.5);
-        glVertex3d(Specification.BACK_BODY_WIDTH*0.5+ Specification.EPS, 0.75*Specification.BACK_BODY_HEIGHT*0.5, 0.75*Specification.BACK_BODY_DEPTH*0.5);
-        glVertex3d(Specification.BACK_BODY_WIDTH*0.5+ Specification.EPS, -0.25*Specification.BACK_BODY_HEIGHT*0.50, 0.75*Specification.BACK_BODY_DEPTH*0.5);
-        glVertex3d(Specification.BACK_BODY_WIDTH*0.5+ Specification.EPS, -0.25*Specification.BACK_BODY_HEIGHT*0.50, 0.375*Specification.BACK_BODY_DEPTH*0.5);
-        glEnd();
-        glPopMatrix();
-
-        glPushMatrix();
-        glTranslated(0,0,- 0.625*Specification.BACK_BODY_DEPTH);
-        glBegin(GL_QUADS);
-        glNormal3d(-1, 0, 0);
-        glVertex3d( -Specification.BACK_BODY_WIDTH*0.5-Specification.EPS, 0.75*Specification.BACK_BODY_HEIGHT*0.5,0.375*Specification.BACK_BODY_DEPTH*0.5);
-        glVertex3d(-Specification.BACK_BODY_WIDTH*0.5-Specification.EPS, -0.25*Specification.BACK_BODY_HEIGHT*0.50, 0.375*Specification.BACK_BODY_DEPTH*0.5);
-        glVertex3d(-Specification.BACK_BODY_WIDTH*0.5-Specification.EPS, -0.25*Specification.BACK_BODY_HEIGHT*0.50, 0.75*Specification.BACK_BODY_DEPTH*0.5);
-        glVertex3d(-Specification.BACK_BODY_WIDTH*0.5-Specification.EPS, 0.75*Specification.BACK_BODY_HEIGHT*0.5, 0.75*Specification.BACK_BODY_DEPTH*0.5);
-        glEnd();
-        glPopMatrix();
+        glTranslated(0,Specification.BACK_BODY_HEIGHT/2,-Specification.BACK_BODY_DEPTH);
+        roof.render();
         glPopMatrix();
     }
 
